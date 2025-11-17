@@ -4,15 +4,13 @@
 
 A Streamlit web app that analyzes your Spotify listening habits. It connects to the Spotify API to calculate your total listening time from recent plays and visualizes your top 15 tracks by popularity.
 
-## 📋 Features
+##Features
 
 * **Secure Login:** Uses Spotify's OAuth to securely log in and access your data.
 * **Listening Time:** Calculates your total listening time (in minutes) from your 50 most recently played tracks.
 * **Top Tracks:** Displays your top 15 most-listened-to tracks in an interactive bar chart and a sortable table.
 
----
-
-## 🚀 How to Run This Project
+##How to Run This Project
 
 Follow these steps to set up and run the project on your local machine.
 
@@ -56,14 +54,12 @@ Follow these steps to set up and run the project on your local machine.
         ```powershell
         .\venv\Scripts\Activate.ps1
         ```
-
 5.  **Install Dependencies:**
     * (You should first create a `requirements.txt` file by running `pip freeze > requirements.txt`)
     * Install all the packages:
         ```bash
         pip install -r requirements.txt
         ```
-
 ### 3. Run the App
 
 1.  Make sure your virtual environment is still active (you should see `(venv)` in your terminal prompt).
