@@ -4,7 +4,7 @@
 
 A Streamlit web app that analyzes your Spotify listening habits. It connects to the Spotify API to calculate your total listening time from recent plays and visualizes your top 15 tracks by popularity.
 
----
+----
 
 ## Features
 
