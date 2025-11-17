@@ -1,4 +1,4 @@
-#.\venv\Scripts\Activate.ps1
+#.\.venv\Scripts\Activate.ps1
 #streamlit run main.py --server.headless True
 #streamlit run main.py
 
