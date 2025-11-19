@@ -27,8 +27,8 @@ Follow these steps to set up and run the project on your local machine.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME.git)
-    cd YOUR_REPOSITORY_NAME
+    git clone [https://github.com/sanjitmathur/Spotify-Song-Analyzer.git](https://github.com/sanjitmathur/Spotify-Song-Analyzer.git)
+    cd Spotify-Song-Analyzer
     ```
 
 2.  **Create a Spotify Developer App:**
