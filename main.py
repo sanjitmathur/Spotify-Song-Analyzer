@@ -2,7 +2,6 @@
 #streamlit run main.py --server.headless True
 #streamlit run main.py
 
- 
 import streamlit as st
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -44,11 +43,16 @@ def get_spotify_token():
         auth_url = auth_manager.get_authorize_url()
         
         try:
-            with open("login_button.html", "r") as f:
+            # FIXED: Construct the absolute path to templates/login_button.html
+            # This ensures Python finds the file regardless of where the terminal runs from
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            file_path = os.path.join(current_dir, "templates", "login_button.html")
+            
+            with open(file_path, "r") as f:
                 html_template = f.read()
             st.markdown(html_template.replace("{auth_url}", auth_url), unsafe_allow_html=True)
         except FileNotFoundError:
-            st.error("login_button.html file not found. Please ensure it is in the same directory.")
+            st.error(f"File not found at: {file_path}. Please ensure 'login_button.html' is inside the 'templates' folder.")
         
         st.stop()
 
