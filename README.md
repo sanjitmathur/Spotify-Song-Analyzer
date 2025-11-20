@@ -1,8 +1,8 @@
-# Spotify Listening Analysis Dashboard
+# Spotify Listening Analysis & Playlist Creator
 
 > **Note:** These instructions are for running the project with a standard Python **`venv`** (virtual environment). This project is not configured to use `conda`. Please follow the `venv` steps below.
 
-A Streamlit web app that analyzes your Spotify listening habits. It connects to the Spotify API to calculate your total listening time from recent plays and visualizes your top 15 tracks by popularity.
+A Streamlit web app that analyzes your Spotify listening habits and helps you curate music. It connects to the Spotify API to calculate your recent listening time, visualizes your top 15 tracks, and allows you to **save those tracks directly to a new Spotify playlist**.
 
 ----
 
@@ -11,6 +11,7 @@ A Streamlit web app that analyzes your Spotify listening habits. It connects to 
 * **Secure Login:** Uses Spotify's OAuth to securely log in and access your data.
 * **Listening Time:** Calculates your total listening time (in minutes) from your 50 most recently played tracks.
 * **Top Tracks:** Displays your top 15 most-listened-to tracks in an interactive bar chart and a sortable table.
+* **Create Playlists:** Instantly save your top 15 tracks as a real Spotify playlist directly from the dashboard. You can even give it a custom name!
 
 ---
 
@@ -32,7 +33,7 @@ Follow these steps to set up and run the project on your local machine.
     ```
 
 2.  **Create a Spotify Developer App:**
-    * Go to the **Spotify Developer Dashboard** and log in.
+    * Go to the **[Spotify Developer Dashboard](https://developer.spotify.com/dashboard/)** and log in.
     * Click **"Create App"**. Give it any name (e.g., "Song Analyzer") and description.
     * Once created, find your **Client ID**. Click **"Show client secret"** to see your **Client Secret**. You will need both.
     * Click **"Edit Settings"**.
