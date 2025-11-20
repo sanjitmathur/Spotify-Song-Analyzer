@@ -1,0 +1,57 @@
+<style>
+    .spotify-btn {
+        background-color: #1DB954;
+        color: white !important;
+        padding: 12px 30px;
+        border-radius: 30px;
+        text-decoration: none !important; /* Force removal of underline */
+        font-weight: 700;
+        display: inline-block;
+        text-align: center;
+        border: 2px solid black;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        min-width: 200px;
+        letter-spacing: 0.5px;
+        
+        -webkit-text-stroke: 0.3px black;                 
+        text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+        transition: all 0.2s ease-in-out;
+    }
+
+    .spotify-btn:hover {
+        background-color: #191414;
+        color: #1DB954 !important;
+        border-color: #1DB954;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(0,0,0,0.2);
+        text-decoration: none !important; /* Ensure underline doesn't appear on hover */
+        
+        -webkit-text-stroke: 0px;
+        text-shadow: 0 0 8px rgba(29, 185, 84, 0.4);
+    }
+
+    .center-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .text-container {
+        text-align: center; 
+        margin-bottom: 25px;
+        font-family: sans-serif;
+        color: #555;
+    }
+</style>
+
+<div class="text-container">
+    This app analyzes your top Spotify songs and provides insights into your listening habits.
+</div>
+
+<div class="center-container">
+    <a href="{auth_url}" class="spotify-btn" target="_self">Log in to Spotify</a>
+</div>

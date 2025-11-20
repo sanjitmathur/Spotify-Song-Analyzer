@@ -2,6 +2,7 @@
 #streamlit run main.py --server.headless True
 #streamlit run main.py
 
+ 
 import streamlit as st
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -16,7 +17,8 @@ load_dotenv()
 CLIENT_ID = os.environ.get('CLIENT_ID')
 CLIENT_SECRET = os.environ.get('CLIENT_SECRET')
 REDIRECT_URI = 'http://127.0.0.1:8501'
-SCOPE = "user-top-read user-read-recently-played" 
+# Added 'playlist-modify-public' to allow playlist creation
+SCOPE = "user-top-read user-read-recently-played playlist-modify-public" 
 
 st.set_page_config(page_title="Spotify Song Analysis", page_icon=":musical_note:")
 st.title("Analysis of Your Top Spotify Songs")
@@ -34,12 +36,20 @@ def get_spotify_token():
     except:
         query_params = st.experimental_get_query_params()
         auth_code = query_params.get("code")
+        if isinstance(auth_code, list) and len(auth_code) > 0:
+            auth_code = auth_code[0]
 
     if not auth_code:
         auth_manager = SpotifyOAuth(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, scope=SCOPE)
         auth_url = auth_manager.get_authorize_url()
-        st.write("This app analyzes your top Spotify songs and provides insights into your listening habits.")
-        st.link_button("Log in to Spotify", auth_url)
+        
+        try:
+            with open("login_button.html", "r") as f:
+                html_template = f.read()
+            st.markdown(html_template.replace("{auth_url}", auth_url), unsafe_allow_html=True)
+        except FileNotFoundError:
+            st.error("login_button.html file not found. Please ensure it is in the same directory.")
+        
         st.stop()
 
     if auth_code:
@@ -47,7 +57,10 @@ def get_spotify_token():
         try:
             token_info = auth_manager.get_access_token(auth_code, as_dict=True)
             st.session_state.token_info = token_info
-            st.query_params.clear()
+            try:
+                st.query_params.clear()
+            except:
+                st.experimental_set_query_params()
             st.rerun()
         except Exception as e:
             st.error(f"Error getting access token: {e}")
@@ -88,12 +101,15 @@ if token_info:
         if top_tracks_data and top_tracks_data['items']:
             
             tracks_info = []
+            track_uris = [] # List to store URIs for playlist creation
+            
             for item in top_tracks_data['items']:
                 tracks_info.append({
                     'track_name': item['name'],
                     'artist': item['artists'][0]['name'],
                     'popularity': item['popularity'],
                 })
+                track_uris.append(item['uri'])
             
             df = pd.DataFrame(tracks_info)
             
@@ -119,8 +135,68 @@ if token_info:
             
             df_display.index = range(1, len(df_display) + 1)
             
-            # This line is now changed to show all 15 rows
             st.dataframe(df_display, height=565)
+            
+            # Playlist Creation Section
+            st.write("---")
+            st.subheader("Save this list")
+            
+            # 1. Custom CSS to style the Streamlit button to match your HTML login button
+            st.markdown("""
+            <style>
+            /* Target the main button inside the Streamlit container */
+            div.stButton > button {
+                background-color: #1DB954 !important;
+                color: white !important;
+                padding: 12px 30px !important;
+                border-radius: 30px !important;
+                border: 2px solid black !important;
+                font-weight: 700 !important;
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+                letter-spacing: 0.5px !important;
+                -webkit-text-stroke: 0.3px black !important;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.15) !important;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+                transition: all 0.2s ease-in-out !important;
+                min-width: 200px;
+                display: block;
+                margin: 0 auto; /* Center it if possible, though Streamlit layout controls this */
+            }
+            
+            div.stButton > button:hover {
+                background-color: #191414 !important;
+                color: #1DB954 !important;
+                border-color: #1DB954 !important;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 8px rgba(0,0,0,0.2) !important;
+                -webkit-text-stroke: 0px !important;
+                text-shadow: 0 0 8px rgba(29, 185, 84, 0.4) !important;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+
+            # 2. Playlist Name Input
+            default_playlist_name = f"My Top Tracks - {datetime.now().strftime('%Y-%m-%d')}"
+            playlist_name_input = st.text_input("Name your playlist:", value=default_playlist_name)
+            
+            # 3. The Button (Styled by the CSS above)
+            if st.button("Create Playlist on Spotify"):
+                if not playlist_name_input.strip():
+                    st.error("Please enter a playlist name.")
+                else:
+                    try:
+                        user_id = sp.current_user()['id']
+                        
+                        # Create the playlist
+                        playlist = sp.user_playlist_create(user_id, playlist_name_input, public=True)
+                        
+                        # Add tracks
+                        sp.playlist_add_items(playlist['id'], track_uris)
+                        
+                        st.balloons()
+                        st.success(f"Playlist '{playlist_name_input}' created successfully! Check your Spotify library.")
+                    except Exception as e:
+                        st.error(f"Failed to create playlist: {e}")
             
         else:
             st.write("Could not retrieve top tracks.")
